@@ -22,8 +22,8 @@ services:
         - path: ./client/user
           target: /usr/src/app
           action: sync
-    networks:
-      - node-network
+    # networks:
+    #   - node-network
   
   client-contributor:
     build:
@@ -39,8 +39,8 @@ services:
         - path: ./client/contributor
           target: /usr/src/app
           action: sync
-    networks:
-      - node-network
+    # networks:
+    #   - node-network
   
   server:
     build:
@@ -62,19 +62,24 @@ services:
           target: /usr/src/app
           action: sync
 
-    networks:
-      - node-network
+    # networks:
+    #   - node-network
   mongodb:
     image: mongo
     ports:
       - '27017:27017'
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: username
+      MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
       - db-code:/data/db
-    networks:
-      - node-network
+    # networks:
+    #   - node-network
 
   postgres-db:
     image: postgres:14-alpine
+    container_name: postgresql
     ports:
       - 5432:5432
     volumes:
@@ -83,14 +88,17 @@ services:
       - POSTGRES_PASSWORD=S3cret
       - POSTGRES_USER=citizix_user
       - POSTGRES_DB=citizix_db
-    networks:
-      - node-network
+    # networks:
+    #   - node-network
 
 volumes:
   db-sub:
   db-code:
 
-networks:
-  node-network:
-    driver: bridge
+# networks:
+#   node-network:
+#     driver: bridge
+    
+
+
 

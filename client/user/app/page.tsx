@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen w-screen">
       <Navbar/>
-      <main className="container m-auto flex-1 py-8">
+      <main className="container p-5 m-auto flex-1 py-8">
         <div>
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-3xl font-bold">Problem Set</h1>

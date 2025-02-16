@@ -1,12 +1,16 @@
-import { Document } from 'mongoose';
-import { Language } from '../../postgres/model/submitted-code.model';
-import { InstanceChecker } from 'typeorm';
+import { Document } from "mongoose";
+import { Language } from "../../postgres/model/submitted-code.model";
+import { InstanceChecker } from "typeorm";
 
-export enum Difficulty {EASY = 'easy', MEDIUM = 'medium', HARD = 'hard'};
+export enum Difficulty {
+  EASY = "easy",
+  MEDIUM = "medium",
+  HARD = "hard",
+}
 export interface Testcases {
   inputVars: string[];
   inputTypes: string[];
-  outputVar: string
+  outputVar: string;
   outputType: string;
   inFile: string;
   outFile: string;

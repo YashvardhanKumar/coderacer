@@ -1,5 +1,5 @@
 import { Schema, Types, model } from "mongoose";
-import { Difficulty, IProblems, Testcases } from "../model/problems.model";
+import { IProblems, Testcases } from "../model/problems.model";
 
 const schema = new Schema<IProblems>(
   {

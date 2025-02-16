@@ -11,7 +11,7 @@ ARG NODE_VERSION=22.13.1
 FROM node:${NODE_VERSION}-alpine AS base
 
 # Use production node environment by default.
-ENV NODE_ENV=production
+ENV NODE_ENV=development
 
 
 WORKDIR /usr/src/app
@@ -25,6 +25,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=cache,target=/root/.npm \
     npm ci --omit=dev
 
+
 # Run the application as a non-root user.
 USER node
 
@@ -35,4 +36,5 @@ COPY . .
 EXPOSE 5050
 
 # Run the application.
-CMD npm start
+CMD ["npm", "start"]
+

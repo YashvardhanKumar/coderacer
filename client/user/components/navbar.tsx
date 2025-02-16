@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 function Navbar() {
   return (
     <header className="border-b w-full">
-      <div className="container m-auto flex items-center justify-between h-16">
+      <div className="p-5 container m-auto flex items-center justify-between h-16">
         <div className="p-5 flex items-center justify-start gap-12 h-16">
           <Link href="/" className="text-2xl font-bold">
             Coderacer

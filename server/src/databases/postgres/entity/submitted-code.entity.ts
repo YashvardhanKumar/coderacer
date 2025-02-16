@@ -11,8 +11,6 @@ export class SubmittedCodeEntity implements ISubmittedCode {
   @Column({ default: 0 })
   problemId!: number;
 
-  
-
   @Column('int')
   status!: Status;
 
