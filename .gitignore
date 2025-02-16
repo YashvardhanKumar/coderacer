@@ -1,0 +1,38 @@
+/server/node_modules
+/client/user/node_modules
+/client/contributor/node_modules
+
+
+
+
+# next.js
+/client/user/.next/
+/client/contributor/.next/
+/client/user/out/
+/client/contributor/out/
+
+# production
+/client/contributor/build
+/client/contributor/build
+# misc
+/client/user/.DS_Store
+/client/contributor/.DS_Store
+/server/.DS_Store
+.DS_Store
+
+
+# env files (can opt-in for committing if needed)
+/server/.env
+/client/user/.env*
+/client/contributor/.env*
+
+# vercel
+/client/user/.vercel
+/client/contributor/.vercel
+
+# typescript
+
+*.tsbuildinfo
+/client/user/next-env.d.ts
+/client/contributor/next-env.d.ts
+

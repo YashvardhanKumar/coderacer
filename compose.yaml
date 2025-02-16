@@ -1,0 +1,96 @@
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker Compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
+
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
+services:
+  client-user:
+    build:
+      context: ./client/user
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+    develop:
+      watch:
+        - path: ./client/user/package.json
+          action: rebuild
+        - path: ./client/user
+          target: /usr/src/app
+          action: sync
+    networks:
+      - node-network
+  
+  client-contributor:
+    build:
+      context: ./client/contributor
+    environment:
+      NODE_ENV: production
+    ports:
+      - 4000:4000
+    develop:
+      watch:
+        - path: ./client/contributor/package.json
+          action: rebuild
+        - path: ./client/contributor
+          target: /usr/src/app
+          action: sync
+    networks:
+      - node-network
+  
+  server:
+    build:
+      context: ./server
+    environment:
+      NODE_ENV: production
+    ports:
+      - 5050:5050
+    depends_on:
+      - mongodb
+      - postgres-db
+    volumes:
+      - .:/src
+    develop:
+      watch:
+        - path: ./server/package.json
+          action: rebuild
+        - path: ./server
+          target: /usr/src/app
+          action: sync
+
+    networks:
+      - node-network
+  mongodb:
+    image: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - db-code:/data/db
+    networks:
+      - node-network
+
+  postgres-db:
+    image: postgres:14-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=S3cret
+      - POSTGRES_USER=citizix_user
+      - POSTGRES_DB=citizix_db
+    networks:
+      - node-network
+
+volumes:
+  db-sub:
+  db-code:
+
+networks:
+  node-network:
+    driver: bridge
+
