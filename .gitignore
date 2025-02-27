@@ -22,7 +22,7 @@
 
 
 # env files (can opt-in for committing if needed)
-/server/.env
+/server/.env*
 /client/user/.env*
 /client/contributor/.env*
 

@@ -1,3 +1,5 @@
+import { UserEntity } from "../entity/user.entity";
+
 export enum Status {
   ACCEPTED = "accepted",
   WRONG_ANSWER = "wrong-answer",
@@ -15,7 +17,7 @@ export enum Language {
   JAVASCRIPT = "javascript"
 }
 export default interface ISubmittedCode {
-    id: number;
+    id: string;
     problemId: number;
     status: Status;
     language: Language;
@@ -24,5 +26,6 @@ export default interface ISubmittedCode {
     runtime: number;
     memory: number;
     testcases: number
+    submitter: UserEntity;
   }
   

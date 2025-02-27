@@ -1,15 +1,16 @@
 import { Schema, Types, model } from "mongoose";
 import { IProblems } from "../model/problems.model";
+import { ISolution } from "../model/solution.model";
 
-const schema = new Schema<IProblems>(
+const schema = new Schema<ISolution>(
   {
     id: {
       type: String,
       required: true,
       unique: true,
     },
-    difficulty: {
-      type: String,
+    authorId: {
+      type: Number,
       required: true,
     },
     title: {
@@ -20,17 +21,13 @@ const schema = new Schema<IProblems>(
       type: String,
       required: true,
     },
-    hints: [{
-      type: String,
-      required: true,
-    }],
     tags: [{
       type: String,
       required: true,
     }],
-    testcases: [{
-      ref: "testcases",
-      type: Schema.Types.ObjectId,
+    comments: [{
+      ref: "solution-comments",
+      type: Types.ObjectId,
       required: true,
     }],
   },
@@ -39,4 +36,4 @@ const schema = new Schema<IProblems>(
   }
 );
 
-export default model<IProblems>("problems", schema);
+export default model<ISolution>("solutions", schema);

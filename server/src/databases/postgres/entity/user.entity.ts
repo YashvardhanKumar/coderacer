@@ -1,19 +1,27 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import ISubmittedCode, { Language, Status } from '../model/submitted-code.model';
-import IUser, { Role } from '../model/user.model';
-
-
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import ISubmittedCode, {
+  Language,
+  Status,
+} from "../model/submitted-code.model";
+import IUser, { AuthProvider, Role } from "../model/user.model";
+import { SubmittedCodeEntity } from "./submitted-code.entity";
 
 @Entity()
 export class UserEntity implements IUser {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id!: string;
+
+  @Column()
+  name!: string;
 
   @Column()
   username!: string;
 
-  @Column()
+  @Column({ select: false, nullable: true })
   password!: string;
+
+  @Column({ default: AuthProvider.LOCAL })
+  authProvider!: AuthProvider;
 
   @Column()
   email!: string;
@@ -21,8 +29,11 @@ export class UserEntity implements IUser {
   @Column({ default: new Date().toDateString() })
   dateRegistered!: string;
 
-  @Column('int')
+  @Column("int")
   role!: Role;
+
+  @OneToMany(() => SubmittedCodeEntity, (sc) => sc.submitter)
+  solutions!: SubmittedCodeEntity[];
 
   @Column({ default: 0 })
   lat!: number;
@@ -30,6 +41,18 @@ export class UserEntity implements IUser {
   @Column({ default: 0 })
   long!: number;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   summary!: string;
+
+  @Column({ nullable: true })
+  github!: string;
+
+  @Column({ nullable: true })
+  linkedin!: string;
+
+  @Column({ nullable: true })
+  facebook!: string;
+
+  @Column({ nullable: true })
+  twitter!: string;
 }

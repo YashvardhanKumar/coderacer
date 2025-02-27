@@ -1,17 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, ManyToOne } from 'typeorm';
 import ISubmittedCode, { Language, Status } from '../model/submitted-code.model';
+import { UserEntity } from './user.entity';
+import IUser from '../model/user.model';
 
 
 
 @Entity()
 export class SubmittedCodeEntity implements ISubmittedCode {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id!: string;
 
   @Column({ default: 0 })
   problemId!: number;
 
-  
+  @ManyToOne(() => UserEntity, (submitter) => submitter.solutions)
+  submitter!: UserEntity;
 
   @Column('int')
   status!: Status;

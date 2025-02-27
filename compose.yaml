@@ -15,6 +15,8 @@ services:
       NODE_ENV: production
     ports:
       - 3000:3000
+    # volumes:
+    #   - .:/src
     develop:
       watch:
         - path: ./client/user/package.json
@@ -22,8 +24,8 @@ services:
         - path: ./client/user
           target: /usr/src/app
           action: sync
-    networks:
-      - node-network
+    # networks:
+    #   - node-network
   
   client-contributor:
     build:
@@ -32,6 +34,8 @@ services:
       NODE_ENV: production
     ports:
       - 4000:4000
+    # volumes:
+    #   - .:/src
     develop:
       watch:
         - path: ./client/contributor/package.json
@@ -39,8 +43,8 @@ services:
         - path: ./client/contributor
           target: /usr/src/app
           action: sync
-    networks:
-      - node-network
+    # networks:
+    #   - node-network
   
   server:
     build:
@@ -52,8 +56,9 @@ services:
     depends_on:
       - mongodb
       - postgres-db
-    volumes:
-      - .:/src
+      - redis
+    # volumes:
+    #   - .:/src
     develop:
       watch:
         - path: ./server/package.json
@@ -62,19 +67,24 @@ services:
           target: /usr/src/app
           action: sync
 
-    networks:
-      - node-network
+    # networks:
+    #   - node-network
   mongodb:
     image: mongo
     ports:
       - '27017:27017'
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: username
+      MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
       - db-code:/data/db
-    networks:
-      - node-network
+    # networks:
+    #   - node-network
 
   postgres-db:
     image: postgres:14-alpine
+    container_name: postgresql
     ports:
       - 5432:5432
     volumes:
@@ -83,14 +93,36 @@ services:
       - POSTGRES_PASSWORD=S3cret
       - POSTGRES_USER=citizix_user
       - POSTGRES_DB=citizix_db
-    networks:
-      - node-network
-
+    # networks:
+    #   - node-network
+  redis:
+      image: redis:latest
+      healthcheck:
+        test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+        interval: 1s
+        timeout: 3s
+        retries: 5
+      command: ["redis-server"]
+    # image: redis:latest
+    # restart: always
+    # ports:
+    #   - "6379:6379"
+    # volumes:
+    #   - ~/apps/redis:/root/redis
+    #   - ~/apps/redis.conf:/usr/local/etc/redis/redis.conf
+    # environment:
+    #   - REDIS_USERNAME=username
+    #   - REDIS_PASSWORD=password
+    #   - REDIS_PORT=6379
+    #   - REDIS_DATABASES=16
 volumes:
   db-sub:
   db-code:
 
-networks:
-  node-network:
-    driver: bridge
+# networks:
+#   node-network:
+#     driver: bridge
+    
+
+
 
