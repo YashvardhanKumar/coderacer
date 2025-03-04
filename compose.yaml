@@ -8,6 +8,56 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
+  server:
+    build:
+      context: ./server
+    environment:
+      NODE_ENV: production
+    ports:
+      - 5050:5050
+    depends_on:
+      - mongodb
+      - postgres-db
+      - redis
+      - cpp
+      - java
+      - typescript
+      - python
+    develop:
+      watch:
+        - path: ./package.json
+          action: rebuild
+        - path: ./server
+          target: /usr/src/app
+          action: sync
+  cpp:
+    build: 
+      context: ./server/dockerfiles
+      dockerfile: Dockerfile.cpp
+    container_name: cpp_env
+    tty: true
+
+  java:
+    build: 
+      context: ./server/dockerfiles
+      dockerfile: Dockerfile.java
+    container_name: java_env
+    tty: true
+
+  typescript:
+    build: 
+      context: ./server/dockerfiles
+      dockerfile: Dockerfile.typescript
+    container_name: js_env
+    tty: true
+
+  python:
+    build: 
+      context: ./server/dockerfiles
+      dockerfile: Dockerfile.python
+    container_name: python_env
+    tty: true
+
   client-user:
     build:
       context: ./client/user
@@ -46,26 +96,7 @@ services:
     # networks:
     #   - node-network
   
-  server:
-    build:
-      context: ./server
-    environment:
-      NODE_ENV: production
-    ports:
-      - 5050:5050
-    depends_on:
-      - mongodb
-      - postgres-db
-      - redis
-    # volumes:
-    #   - .:/src
-    develop:
-      watch:
-        - path: ./server/package.json
-          action: rebuild
-        - path: ./server
-          target: /usr/src/app
-          action: sync
+
 
     # networks:
     #   - node-network
