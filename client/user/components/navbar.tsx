@@ -1,7 +1,14 @@
+"use client";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect } from "react";
 
-function Navbar() {
+function Navbar({dp, name}: {dp: string, name: string}) {
+  const nav = useRouter();
+
+  
   return (
     <header className="border-b w-full">
       <div className="p-5 container m-auto flex items-center justify-between h-16">
@@ -24,8 +31,17 @@ function Navbar() {
         </div>
 
         <nav className="flex items-center space-x-4">
-          <Button>Sign In</Button>
-          <Button variant={"outline"}>Create an Account</Button>
+          {(typeof window !== 'undefined' && localStorage.getItem("isAuth") != "Yes") ? (
+            <>
+              <Button onClick={() => nav.push("/login")}>Sign In</Button>
+              <Button variant={"outline"}>Create an Account</Button>
+            </>
+          ) : (
+            <Avatar>
+              <AvatarImage src={dp} />
+              <AvatarFallback>{name?.split(" ").map((e) => e[0]).join("").toUpperCase()}</AvatarFallback>
+            </Avatar>
+          )}
         </nav>
       </div>
     </header>

@@ -1,26 +1,17 @@
-import { Document } from "mongoose";
-import { Language } from "../../postgres/model/submitted-code.model";
-import { InstanceChecker } from "typeorm";
+import { Document, ObjectId, Schema } from "mongoose";
 
 export enum Difficulty {
   EASY = "easy",
   MEDIUM = "medium",
   HARD = "hard",
 }
-export interface Testcases {
-  inputVars: string[];
-  inputTypes: string[];
-  outputVar: string;
-  outputType: string;
-  inFile: string;
-  outFile: string;
-}
-export interface IProblems extends Document {
-  id: number;
+
+export class IProblems extends Document {
+  _id: ObjectId;
   difficulty: Difficulty;
   title: string;
   description: string;
-  hints: string[];
-  tags: string[];
-  testcases: Array<Testcases>;
+  hints: [string];
+  tags: [string];
+  testcases: Schema.Types.ObjectId;
 }

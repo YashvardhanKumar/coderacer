@@ -8,40 +8,6 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-  client-user:
-    build:
-      context: ./client/user
-    environment:
-      NODE_ENV: production
-    ports:
-      - 3000:3000
-    develop:
-      watch:
-        - path: ./client/user/package.json
-          action: rebuild
-        - path: ./client/user
-          target: /usr/src/app
-          action: sync
-    # networks:
-    #   - node-network
-  
-  client-contributor:
-    build:
-      context: ./client/contributor
-    environment:
-      NODE_ENV: production
-    ports:
-      - 4000:4000
-    develop:
-      watch:
-        - path: ./client/contributor/package.json
-          action: rebuild
-        - path: ./client/contributor
-          target: /usr/src/app
-          action: sync
-    # networks:
-    #   - node-network
-  
   server:
     build:
       context: ./server
@@ -52,18 +18,90 @@ services:
     depends_on:
       - mongodb
       - postgres-db
-    volumes:
-      - .:/src
+      - redis
+      - cpp
+      - java
+      - typescript
+      - python
     develop:
       watch:
-        - path: ./server/package.json
+        - path: ./package.json
           action: rebuild
         - path: ./server
           target: /usr/src/app
           action: sync
+    networks:
+      - app-network
+  cpp:
+    build: 
+      context: ./server/dockerfiles
+      dockerfile: Dockerfile.cpp
+    container_name: cpp_env
+    tty: true
+    networks:
+      - app-network
 
-    # networks:
-    #   - node-network
+  java:
+    build: 
+      context: ./server/dockerfiles
+      dockerfile: Dockerfile.java
+    container_name: java_env
+    tty: true
+    networks:
+      - app-network
+
+  typescript:
+    build: 
+      context: ./server/dockerfiles
+      dockerfile: Dockerfile.typescript
+    container_name: js_env
+    tty: true
+    networks:
+      - app-network
+
+  python:
+    build: 
+      context: ./server/dockerfiles
+      dockerfile: Dockerfile.python
+    container_name: python_env
+    tty: true
+    networks:
+      - app-network
+
+  client-user:
+    build:
+      context: ./client/user
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+    # volumes:
+    #   - .:/src
+    develop:
+      watch:
+        - path: ./client/user/package.json
+          action: rebuild
+        - path: ./client/user
+          target: /usr/src/app
+          action: sync
+  
+  client-contributor:
+    build:
+      context: ./client/contributor
+    environment:
+      NODE_ENV: production
+    ports:
+      - 4000:4000
+    # volumes:
+    #   - .:/src
+    develop:
+      watch:
+        - path: ./client/contributor/package.json
+          action: rebuild
+        - path: ./client/contributor
+          target: /usr/src/app
+          action: sync
+
   mongodb:
     image: mongo
     ports:
@@ -74,8 +112,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
       - db-code:/data/db
-    # networks:
-    #   - node-network
+    networks:
+      - app-network
 
   postgres-db:
     image: postgres:14-alpine
@@ -88,16 +126,68 @@ services:
       - POSTGRES_PASSWORD=S3cret
       - POSTGRES_USER=citizix_user
       - POSTGRES_DB=citizix_db
-    # networks:
-    #   - node-network
+    networks:
+      - app-network
+  
+  # redis:
+  #   build:
+  #     context: ./server/dockerfiles
+  #     dockerfile: Dockerfile.rebloom
+  #   ports:
+  #     - '6379:6379'
+  #   volumes:
+  #     - redis_data:/data
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 10s
+  #     timeout: 3s
+  #     retries: 5
+  redis:
+    image: redis/redis-stack-server:latest
+    container_name: redis-stack
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+      # - ~/apps/redis:/root/redis
+      # - ~/apps/redis.conf:/usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    # environment:
+    #   - REDIS_USERNAME=username
+    #   - REDIS_PASSWORD=password
+    #   - REDIS_PORT=6379
+    #   - REDIS_DATABASES=16
+    networks:
+      - app-network
+  # redis:
+  #     image: redis:latest
+  #     healthcheck:
+  #       test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+  #       interval: 1s
+  #       timeout: 3s
+  #       retries: 5
+  #     command: ["redis-server"]
+  #   # image: redis:latest
+  #   # restart: always
+  #   # ports:
+  #   #   - "6379:6379"
+  #   # volumes:
+
+
 
 volumes:
   db-sub:
   db-code:
+  redis_data:
+    driver: local
 
-# networks:
-#   node-network:
-#     driver: bridge
+networks:
+  app-network:
+    driver: bridge
     
 
 

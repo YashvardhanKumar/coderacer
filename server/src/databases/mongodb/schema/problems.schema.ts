@@ -1,13 +1,8 @@
 import { Schema, Types, model } from "mongoose";
-import { IProblems, Testcases } from "../model/problems.model";
+import { IProblems } from "../model/problems.model";
 
 const schema = new Schema<IProblems>(
   {
-    id: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
     difficulty: {
       type: String,
       required: true,
@@ -20,18 +15,19 @@ const schema = new Schema<IProblems>(
       type: String,
       required: true,
     },
-    hints: {
-      type: [String],
+    hints: [{
+      type: String,
       required: true,
-    },
-    tags: {
-      type: [String],
+    }],
+    tags: [{
+      type: String,
       required: true,
-    },
-    testcases: {
-      type: [Types.Map<Testcases>],
+    }],
+    testcases: [{
+      ref: "testcases",
+      type: Schema.Types.ObjectId,
       required: true,
-    },
+    }],
   },
   {
     timestamps: true,
