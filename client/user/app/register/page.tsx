@@ -9,29 +9,48 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import React, { MouseEvent, MouseEventHandler, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { FaGithub, FaGoogle, FaLinkedin } from "react-icons/fa";
-import axios from "axios";
-import { randomUUID } from "crypto";
-import { v4 as uuidv4 } from 'uuid';
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-const formSchema = z.object({
-  email: z.string({ message: "Required" }).email(),
-  password: z.string({ message: "Required" }),
-});
-export default function Login() {
-  const [isConnected, setIsConnected] = useState(false);
-  const [isConnecting, setIsConnecting] = useState(false);
-  const nav = useRouter();
+const formSchema = z
+  .object({
+    username: z.string({ message: "Required" }).min(1).max(50),
+    email: z.string({ message: "Required" }).email(),
+    password: z
+      .string({ message: "Required" })
+      .min(8)
+      .max(20)
+      .refine((password) => /[A-Z]/.test(password), {
+        message: "Add an uppercase letter",
+      })
+      .refine((password) => /[a-z]/.test(password), {
+        message: "Add a lowercase letter",
+      })
+      .refine((password) => /[0-9]/.test(password), { message: "Add a number" })
+      .refine((password) => /[!@#$%^&*]/.test(password), {
+        message: "Add a special character",
+      }),
+    confirmPassword: z.string({ message: "Required" }).min(8),
+  })
+  .superRefine(({ confirmPassword, password }, ctx) => {
+    if (confirmPassword !== password) {
+      ctx.addIssue({
+        code: "custom",
+        message: "The passwords did not match",
+        path: ["confirmPassword"],
+      });
+    }
+  });
+export default function Register() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      username: "",
       email: "",
       password: "",
     },
@@ -39,69 +58,16 @@ export default function Login() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
   }
-  async function handleGithubButton() {
-    try {
-      setIsConnecting(true);
-      const userId = uuidv4();
-      const res = await axios.post("http://localhost:5050/auth/github", {
-        userId,
-        role: "user"
-      });
-
-      const uri = res.data.url;
-      var ref = window.open(uri, "_blank");
-      const pollTimer = window.setInterval(() => {
-        if (ref?.closed !== false) {
-          window.clearInterval(pollTimer);
-          handleWindowClosed(userId);
-        }
-      }, 200);
-    } catch (e: any) {
-      setIsConnecting(false);
-      alert(e.message);
-    }
-
-    // Redirect to Github OAuth
-  }
-
-  const handleWindowClosed = async (userId: string) => {
-    try {
-      const response = await axios.post(
-        `http://localhost:5050/auth/github/credentials`,
-        {
-          userId,
-        },{
-          withCredentials: true,
-        }
-      );
-      const credentials = response.data;
-      console.log(credentials);
-      
-      if (credentials) {
-        setIsConnecting(false);
-        setIsConnected(true);
-        localStorage.setItem("isAuth", "Yes");
-        localStorage.setItem("role", "user");
-        localStorage.setItem("userId", credentials.userId);
-        nav.replace('/')
-      }
-      setIsConnecting(false);
-    } catch (e: any) {
-      setIsConnecting(false);
-      alert(e.message);
-    }
-  };
-
   return (
     <div className="flex flex-col h-screen justify-center items-center">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-3 max-w-lg w-full p-5 bg-gray-50 rounded-xl"
+          className="flex flex-col gap-4 max-w-lg w-full p-8 bg-gray-50 rounded-xl"
         >
           <div className="flex flex-col items-center gap-2">
             <div className="text-2xl font-medium self-center">
-              Login as User
+              Register as a User
             </div>
             <div className="h-[1px] w-full bg-black opacity-20"></div>
           </div>
@@ -118,14 +84,37 @@ export default function Login() {
                 </FormItem>
               )}
             />
-
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="Choose a Username" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Password" />
+                    <Input placeholder="Create Password" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="Confirm your Password" />
                   </FormControl>
                   {/* <FormDescription>
                 This is your public display name.
@@ -134,29 +123,26 @@ export default function Login() {
                 </FormItem>
               )}
             />
-            <div className="flex justify-between">
-              <Link href="#" className="text-sm font-medium">
-                Forgot Password?
-              </Link>
+            <div className="flex justify-end">
               <Link href="/register" className="text-sm font-bold">
                 Sign Up
               </Link>
             </div>
           </div>
-          <Button children="Sign In" className="text-white font-bold mt-2 " />
+          <Button children="Sign Up" className="text-white font-bold mt-2 " />
           <div className="w-full flex flex-nowrap items-center gap-3 mt-2 text-gray-400">
             <div className="h-[1px] flex-1 bg-black opacity-20"></div>
-            <div>or sign in with</div>
+            <div>or sign up with</div>
 
             <div className="h-[1px] flex-1 bg-black opacity-20"></div>
           </div>
           <div className="flex justify-center gap-4">
-            <button onClick={() => handleGithubButton()}>
+          <Button>
               <FaGithub
                 size={24}
                 className="mr-2 text-gray-400 hover:text-black"
               />
-            </button>
+            </Button>
             <Link href="#">
               <FaLinkedin
                 size={24}

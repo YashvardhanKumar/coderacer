@@ -1,7 +1,7 @@
-import { Schema, Types } from "mongoose";
+import { ObjectId, Schema, Types } from "mongoose";
 
-export interface ISolution extends Document {
-  id: string;
+export class ISolution extends Document {
+  _id: ObjectId;
   authorId: number;
   title: string;
   description: string;

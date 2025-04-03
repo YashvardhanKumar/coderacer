@@ -5,11 +5,6 @@ import { ITestcases } from "../model/testcases.model";
 
 const schema = new Schema<ITestcases>(
   {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     problemId: {
       type: Number,
       required: true,

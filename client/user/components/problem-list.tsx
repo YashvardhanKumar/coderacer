@@ -2,7 +2,7 @@ import Link from "next/link"
 
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { CheckIcon, CircleCheck, CircleCheckBig, CircleCheckBigIcon, CircleCheckIcon } from "lucide-react"
+import { CircleCheckBigIcon } from "lucide-react"
 
 const problems = [
   {

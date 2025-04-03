@@ -3,11 +3,6 @@ import { IProblems } from "../model/problems.model";
 
 const schema = new Schema<IProblems>(
   {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     difficulty: {
       type: String,
       required: true,

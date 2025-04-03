@@ -1,23 +1,14 @@
-import { Router, Request, Response } from "express";
-import { useTypeORM } from "../databases/postgres/typeorm";
-import { UserEntity } from "../databases/postgres/entity/user.entity";
-import { addSuccessWrapper } from "../utils/catchAsync";
+import { Request, Response } from "express";
 import { UserService } from "../services/user.services";
+import { addSuccessWrapper } from "../utils/catchAsync";
+import { success } from "../utils/errorcodes";
 
-const controller = Router();
+export class User {
+  static async getUsers(req: Request, res: Response) {
+    addSuccessWrapper(res, await UserService.getUsers());
+  }
 
-controller
-
-  .post("/register", async (req: Request, res: Response) => {
-    addSuccessWrapper(res,UserService.createUser(req.body));
-  })
-
-  .get("/", async (req: Request, res: Response) => {
-    const products = await useTypeORM(UserEntity).find();
-    res.send(products);
-  })
-
-  .get("/:id", async (req: Request, res: Response) => {
+  static async getUsersOne(req: Request, res: Response) {
     const { id } = req.params;
 
     if (!id) {
@@ -25,7 +16,7 @@ controller
       return;
     }
 
-    const existingProduct = await useTypeORM(UserEntity).findOneBy({ id });
+    const existingProduct = await UserService.getUsersOne(id);
 
     if (!existingProduct) {
       res
@@ -34,18 +25,20 @@ controller
       return;
     }
 
-    res.send(existingProduct);
-  })
+    success(res, existingProduct);
+  }
 
-  .patch("/:id", async (req: Request, res: Response) => {
-    const { id } = req.params;
+  // cur-user
+  static async getCurUser(req: Request, res: Response) {
+    console.log(req.user);    
+    const id = req.user.userId;
 
     if (!id) {
       res.status(400).send({ message: 'Required parameter "id" is missing!' });
       return;
     }
 
-    const existingProduct = await useTypeORM(UserEntity).findOneBy({ id });
+    const existingProduct = await UserService.getUsersOne(id);
 
     if (!existingProduct) {
       res
@@ -54,14 +47,9 @@ controller
       return;
     }
 
-    const changes: Partial<UserEntity> = req.body;
-    const productChanges = { ...existingProduct, ...changes };
-
-    const updatedProduct = await useTypeORM(UserEntity).save(productChanges);
-    res.send(updatedProduct);
-  })
-
-  .delete("/:id", async (req: Request, res: Response) => {
+    success(res, {});
+  }
+  static async updateUser(req: Request, res: Response) {
     const { id } = req.params;
 
     if (!id) {
@@ -69,7 +57,7 @@ controller
       return;
     }
 
-    const existingProduct = await useTypeORM(UserEntity).findOneBy({ id });
+    const existingProduct = await UserService.getUsersOne(id);
 
     if (!existingProduct) {
       res
@@ -78,8 +66,28 @@ controller
       return;
     }
 
-    await useTypeORM(UserEntity).remove(existingProduct);
-    res.send({ message: "Product removed!" });
-  });
+    const updatedProduct = await UserService.updateUsers(id, req.body);
+    success(res, updatedProduct);
+  }
 
-export default controller;
+  static async deleteUser(req: Request, res: Response) {
+    const { id } = req.params;
+
+    if (!id) {
+      res.status(400).send({ message: 'Required parameter "id" is missing!' });
+      return;
+    }
+
+    const existingProduct = await UserService.getUsersOne(id);
+
+    if (!existingProduct) {
+      res
+        .status(404)
+        .send({ message: `Product with id: ${id} was not found.` });
+      return;
+    }
+
+    await UserService.deleteUser(id);
+    success(res, { message: "Product removed!" });
+  }
+}

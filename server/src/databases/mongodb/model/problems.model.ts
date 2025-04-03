@@ -1,6 +1,4 @@
-import { Document, Schema } from "mongoose";
-import { Language } from "../../postgres/model/submitted-code.model";
-import { InstanceChecker } from "typeorm";
+import { Document, ObjectId, Schema } from "mongoose";
 
 export enum Difficulty {
   EASY = "easy",
@@ -8,8 +6,8 @@ export enum Difficulty {
   HARD = "hard",
 }
 
-export interface IProblems extends Document {
-  id: string;
+export class IProblems extends Document {
+  _id: ObjectId;
   difficulty: Difficulty;
   title: string;
   description: string;

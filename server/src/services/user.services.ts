@@ -1,37 +1,114 @@
 import argon2 from "argon2";
 import { UserEntity } from "../databases/postgres/entity/user.entity";
 import IUser from "../databases/postgres/model/user.model";
-import { useTypeORM } from "../databases/postgres/typeorm";
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import { server_error, success } from "../utils/errorcodes";
+import { useTypeORM } from "../databases/postgres/typeorm";
+import { Repository } from "typeorm";
+import { rClient } from "../databases/redis";
+import { CreateUserInput, UpdateUserInput } from "../resolvers/user/user.input";
 
 export class UserService {
-  static async createUser(user: IUser) {
-    const newUser = new UserEntity();
-    newUser.id = uuidv4();
-    newUser.username = user.username;
-    newUser.name = user.name;
-    newUser.password = user.password ? await argon2.hash(user.password) : undefined;
-    newUser.email = user.email;
-    newUser.dateRegistered = new Date().toISOString();
-    newUser.role = user.role;
-    newUser.lat = user.lat;
-    newUser.long = user.long;
-    newUser.summary = user.summary;
-    newUser.github = user.github;
-    newUser.linkedin = user.linkedin;
-    newUser.facebook = user.facebook;
-    newUser.twitter = user.twitter;
+  static async checkUserExists(email: string, role: string) {
+    const db = useTypeORM(UserEntity);
+    const existingUser = await db.findOne({
+      where: [{ email }],
+    });
+    if (existingUser?.email == email && existingUser.role == role) {
+      return { user: existingUser, exists: true };
+    } else {
+      return { exists: false };
+    }
+  }
+  static async createUser(inputData: CreateUserInput) {
+    const db = useTypeORM(UserEntity);
 
-    const newProduct = await useTypeORM(UserEntity).insert(user);
-    return newProduct;
+    while (await rClient.bf.exists("username:models", inputData.username)) {
+      console.log("Username already exists!");
+      inputData.username =
+        inputData.username + "_" + uuidv4().split("-").reverse()[0];
+    }
+    const bloom = await rClient.bf.add("username:models", inputData.username);
+
+    const user = db.create({
+      name: inputData.name,
+      username: inputData.username,
+      email: inputData.email,
+      role: inputData.role,
+      authProvider: inputData.authProvider,
+      summary: inputData.summary,
+      github: inputData.github,
+      password: inputData.password
+        ? await argon2.hash(inputData.password)
+        : undefined,
+      linkedin: inputData.linkedin,
+      twitter: inputData.twitter,
+      facebook: inputData.facebook,
+      lat: inputData.lat,
+      long: inputData.long,
+      avatar: inputData.avatar,
+    });
+
+    return user;
   }
 
-  static async getUserById(id: number) {
-    return useTypeORM(UserEntity).findOne({ where: { id } });
+  static async getUsers() {
+    const db = useTypeORM(UserEntity);
+
+    const users = await db.find({
+      // relations: ["solutions"],
+      order: { createdAt: "DESC" },
+    });
+
+    return users;
   }
-  static async getUserByUsername(username: string) {
-    return useTypeORM(UserEntity).findOne({ where: { username } });
+
+  static async getUsersOne(id: string) {
+    const db = useTypeORM(UserEntity);
+
+    const users = await db.findOne({
+      where: { id },
+      relations: ["solutions"],
+      order: { createdAt: "DESC" },
+    });
+
+    return users;
   }
+
+  static async updateUsers(id: string, inputData: UpdateUserInput) {
+    const db = useTypeORM(UserEntity);
+
+    const user = await this.getUsersOne(id);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    await db.update(
+      { id },
+      {
+        id,
+        ...inputData,
+      }
+    );
+
+    return user;
+  }
+
+  static async deleteUser(id: string) {
+    const db = useTypeORM(UserEntity);
+
+    const user = await this.getUsersOne(id);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    await db.delete(
+      { id }
+    );
+
+    return user;
+  } 
 }

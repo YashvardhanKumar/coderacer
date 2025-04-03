@@ -1,7 +1,7 @@
-import { Schema, Types } from "mongoose";
+import { ObjectId, Schema, Types } from "mongoose";
 
-export interface ISolutionComments extends Document {
-  id: string;
+export class ISolutionComments extends Document {
+  _id: ObjectId;
   authorId: number;
   description: string;
   commentsOf: Schema.Types.ObjectId;

@@ -10,14 +10,19 @@ export interface JwtPayload extends jwt.JwtPayload {
     provider: AuthProvider
 }
 export const authorizedUser = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies.get('token');
+    console.log(req.cookies);
+    
+    const token = req.cookies.accessToken;
     const publicKey = process.env.PUBLIC_KEY || 'secret';
     let payload: JwtPayload
     try {
+        console.log(token);
+        
         payload = jwt.verify(token, publicKey, { algorithms: ["RS256"] }) as JwtPayload;
         
     } catch (err) {
         const error = err as JsonWebTokenError
+        
         unauthorized(res, { message: error.message });
         return;
     }

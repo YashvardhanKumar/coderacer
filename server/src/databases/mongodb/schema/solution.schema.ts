@@ -4,11 +4,6 @@ import { ISolution } from "../model/solution.model";
 
 const schema = new Schema<ISolution>(
   {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     authorId: {
       type: Number,
       required: true,

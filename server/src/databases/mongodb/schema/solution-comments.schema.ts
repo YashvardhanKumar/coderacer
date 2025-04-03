@@ -3,11 +3,6 @@ import { ISolutionComments } from "../model/solution-comments.model";
 
 const schema = new Schema<ISolutionComments>(
   {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     authorId: {
       type: Number,
       required: true,
