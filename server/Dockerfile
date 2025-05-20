@@ -14,7 +14,7 @@ FROM node:${NODE_VERSION}-alpine AS base
 ENV NODE_ENV=development
 
 
-WORKDIR /usr/src/app
+WORKDIR /home/coderacer/server
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
@@ -31,9 +31,6 @@ USER node
 
 # Copy the rest of the source files into the image.
 COPY . .
-
-# Expose the port that the application listens on.
-EXPOSE 5050
 
 # Run the application.
 CMD ["npm", "start"]

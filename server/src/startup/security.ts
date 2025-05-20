@@ -8,7 +8,7 @@ const securitySetup = (app: Express, express: any) =>
       "*",
       cors({
         credentials: true,
-        origin: "http://localhost:3000",
+        origin: "http://localhost",
       })
     )
     .use(express.json())

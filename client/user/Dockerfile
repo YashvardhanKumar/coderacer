@@ -8,12 +8,10 @@
 
 ARG NODE_VERSION=22.13.1
 
-################################################################################
-# Use node image for base image for all stages.
-FROM node:${NODE_VERSION}-alpine
+FROM node:${NODE_VERSION}-alpine AS base
 
 # Set working directory for all build stages.
-WORKDIR /usr/src/app
+WORKDIR /home/coderacer/client/user
 
 
 ################################################################################
@@ -81,7 +79,7 @@ RUN npm install
 COPY . .
  
 # Expose the port your app runs on
-EXPOSE 3000
+
  
 # Define the command to run your app
 CMD ["npm", "run", "dev"]
