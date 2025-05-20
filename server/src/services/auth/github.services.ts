@@ -103,7 +103,6 @@ export class Github {
         `);
     } catch (error) {
       console.error(error);
-
       bad_req(res, { error: req.query.error });
       return;
     }
@@ -115,7 +114,9 @@ export class Github {
       if (!credentials) {
         bad_req(res, { error: "No credentials found." });
       }
-
+      console.log(credentials);
+      
+      
       const cred_json = JSON.parse(
         Buffer.from(credentials ?? "", "base64url").toString()
       );

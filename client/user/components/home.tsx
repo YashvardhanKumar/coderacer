@@ -18,7 +18,8 @@ import { getCurUser, getUserById } from "@/lib/api/user";
 export const HomePage = () => {
   const [curUser,setCurUser] = useState();
   useEffect(() => {
-    getCurUser().then(user => setCurUser(user));
+    if(localStorage.getItem('isAuth') == 'Yes')
+      getCurUser().then(user => setCurUser(user));
   }, []);
   return (
       <div className="flex flex-col min-h-screen w-screen">

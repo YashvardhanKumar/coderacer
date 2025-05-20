@@ -70,15 +70,11 @@ WORKDIR /home/coderacer/client/contributor
 
 # # Run the application.
 # CMD npm start
-COPY package*.json ./
- 
-# Install dependencies
-RUN npm install
+
  
 # Copy the rest of your application files
 COPY . .
- 
-# Expose the port your app runs on
+
  
 # Define the command to run your app
 CMD ["npm", "run", "dev"]

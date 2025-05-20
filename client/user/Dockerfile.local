@@ -11,7 +11,7 @@ ARG NODE_VERSION=22.13.1
 FROM node:${NODE_VERSION}-alpine AS base
 
 # Set working directory for all build stages.
-WORKDIR /home/coderacer/client/contributor
+WORKDIR /home/coderacer/client/user
 
 
 ################################################################################
@@ -70,15 +70,11 @@ WORKDIR /home/coderacer/client/contributor
 
 # # Run the application.
 # CMD npm start
-COPY package*.json ./
- 
-# Install dependencies
-RUN npm install
+
  
 # Copy the rest of your application files
 COPY . .
  
-# Expose the port your app runs on
  
 # Define the command to run your app
 CMD ["npm", "run", "dev"]
