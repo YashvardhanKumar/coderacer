@@ -3,16 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   env: {
-    SERVER_URL: 'http://localhost:5050',
+    SERVER_URL: 'http://api.localhost',
   },
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: '/api/:path*',
-  //       destination: 'http://127.0.0.1:5050/:path*' // Proxy to Backend
-  //     }
-  //   ]
-  // }
+
 
 };
 

@@ -22,7 +22,7 @@ declare module "express-serve-static-core" {
   }
 }
 
-const REDIRECT_URL = "http://localhost:5050/auth/github/oauth2callback";
+const REDIRECT_URL = "http://api.localhost/auth/github/oauth2callback";
 const GITHUB_AUTH_URL = "https://github.com/login/oauth/authorize";
 const scopes = ["read:user", "user:email"].join("%20");
 

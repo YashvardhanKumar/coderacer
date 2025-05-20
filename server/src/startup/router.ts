@@ -15,9 +15,9 @@ const routerSetup = (app: Express) =>
       res.send(`
         <center>
           HealthCheck OK! 
-          <a href="http://localhost:3000">User</a>
-          <a href="http://localhost:4000">Contributor</a>
-          <a href="http://localhost:5050/graphql">GQL Playground</a>
+          <a href="http://localhost">User</a>
+          <a href="http://contributor.localhost">Contributor</a>
+          <a href="http://api.localhost/graphql">GQL Playground</a>
         </center>
         `);
     });

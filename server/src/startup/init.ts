@@ -36,7 +36,7 @@ const appSetup = async (app: Express) => {
         "\x1b[33m%s\x1b[0m",
         `Server started! \n - Go to http://${
           networkInterfaces()["eth0"]![0]!.address
-        }:${APP_PORT} \n - Go to http://localhost:${APP_PORT}`
+        }:${APP_PORT} \n - Go to http://api.localhost/`
       );
     });
   } catch (error: unknown) {

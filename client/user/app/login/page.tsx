@@ -43,9 +43,9 @@ export default function Login() {
     try {
       setIsConnecting(true);
       const userId = uuidv4();
-      const res = await axios.post("http://localhost:5050/auth/github", {
+      const res = await axios.post("http://api.localhost/auth/github", {
         userId,
-        role: "user"
+        role: "user",
       });
 
       const uri = res.data.url;
@@ -67,7 +67,7 @@ export default function Login() {
   const handleWindowClosed = async (userId: string) => {
     try {
       const response = await axios.post(
-        `http://localhost:5050/auth/github/credentials`,
+        `http://api.localhost/auth/github/credentials`,
         {
           userId,
         },{

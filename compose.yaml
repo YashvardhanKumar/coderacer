@@ -35,6 +35,7 @@ services:
     tty: true
     environment:
       NODE_ENV: production
+    command: npm run dev
     depends_on:
       - mongodb
       - postgres-db
