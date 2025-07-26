@@ -2,7 +2,7 @@
 A problem solving platform where you can practice questions for Online Assessments and Interviews
 
 ## Prerequisites
-
+Install the following
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
