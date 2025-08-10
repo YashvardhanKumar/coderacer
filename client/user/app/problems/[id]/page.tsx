@@ -14,13 +14,13 @@ import {
   Code,
 } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Editor, { Monaco, OnChange } from "@monaco-editor/react";
+import Editor, { OnChange } from "@monaco-editor/react";
 
-export default function page() {
+export default function Page() {
   const [activeLanguage, setActiveLanguage] = useState("javascript");
   const editorRef = useRef(null);
 
-  function handleEditorDidMount(editor: any, monaco: Monaco) {
+  function handleEditorDidMount(editor: any) {
     editorRef.current = editor;
   }
 
@@ -64,7 +64,7 @@ public:
   };
 
   // Handle code change
-  const handleCodeChange : OnChange = (value, ev) => {
+  const handleCodeChange : OnChange = (value) => {
     setCodeByLanguage({
       ...codeByLanguage,
       [activeLanguage]: value ?? '',
@@ -72,58 +72,58 @@ public:
   };
 
   // Auto-closing brackets functionality
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    const textarea = e.currentTarget;
-    const { selectionStart, selectionEnd, value } = textarea;
+  // const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  //   const textarea = e.currentTarget;
+  //   const { selectionStart, selectionEnd, value } = textarea;
 
-    // Handle tab key for indentation
-    if (e.key === "Tab") {
-      e.preventDefault();
-      const newValue =
-        value.substring(0, selectionStart) +
-        "  " +
-        value.substring(selectionEnd);
-      setCodeByLanguage({
-        ...codeByLanguage,
-        [activeLanguage]: newValue,
-      });
+  //   // Handle tab key for indentation
+  //   if (e.key === "Tab") {
+  //     e.preventDefault();
+  //     const newValue =
+  //       value.substring(0, selectionStart) +
+  //       "  " +
+  //       value.substring(selectionEnd);
+  //     setCodeByLanguage({
+  //       ...codeByLanguage,
+  //       [activeLanguage]: newValue,
+  //     });
 
-      // Set cursor position after indentation
-      setTimeout(() => {
-        textarea.selectionStart = textarea.selectionEnd = selectionStart + 2;
-      }, 0);
-    }
+  //     // Set cursor position after indentation
+  //     setTimeout(() => {
+  //       textarea.selectionStart = textarea.selectionEnd = selectionStart + 2;
+  //     }, 0);
+  //   }
 
-    // Auto-closing brackets
-    const brackets: Record<string, string> = {
-      "(": ")",
-      "{": "}",
-      "[": "]",
-      '"': '"',
-      "'": "'",
-      "`": "`",
-    };
+  //   // Auto-closing brackets
+  //   const brackets: Record<string, string> = {
+  //     "(": ")",
+  //     "{": "}",
+  //     "[": "]",
+  //     '"': '"',
+  //     "'": "'",
+  //     "`": "`",
+  //   };
 
-    if (brackets[e.key]) {
-      e.preventDefault();
-      const closingBracket = brackets[e.key];
-      const newValue =
-        value.substring(0, selectionStart) +
-        e.key +
-        closingBracket +
-        value.substring(selectionEnd);
+  //   if (brackets[e.key]) {
+  //     e.preventDefault();
+  //     const closingBracket = brackets[e.key];
+  //     const newValue =
+  //       value.substring(0, selectionStart) +
+  //       e.key +
+  //       closingBracket +
+  //       value.substring(selectionEnd);
 
-      setCodeByLanguage({
-        ...codeByLanguage,
-        [activeLanguage]: newValue,
-      });
+  //     setCodeByLanguage({
+  //       ...codeByLanguage,
+  //       [activeLanguage]: newValue,
+  //     });
 
-      // Place cursor between brackets
-      setTimeout(() => {
-        textarea.selectionStart = textarea.selectionEnd = selectionStart + 1;
-      }, 0);
-    }
-  };
+  //     // Place cursor between brackets
+  //     setTimeout(() => {
+  //       textarea.selectionStart = textarea.selectionEnd = selectionStart + 1;
+  //     }, 0);
+  //   }
+  // };
 
   // Format code function
 const formatCode = () => {

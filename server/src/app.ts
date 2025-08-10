@@ -1,10 +1,9 @@
-import express from "express";
-import dotenvx from "@dotenvx/dotenvx";
+import express from 'express';
+import dotenvx from '@dotenvx/dotenvx';
 
-import appSetup from "./startup/init";
-import routerSetup from "./startup/router";
-import securitySetup from "./startup/security";
-import path from "path";
+import appSetup from './startup/init';
+import routerSetup from './startup/router';
+import securitySetup from './startup/security';
 
 const app = express();
 

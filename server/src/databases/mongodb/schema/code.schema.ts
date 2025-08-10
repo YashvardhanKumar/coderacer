@@ -1,11 +1,10 @@
-import { Schema, Types, model } from "mongoose";
-import { IProblems } from "../model/problems.model";
-import { ICode } from "../model/code.model";
+import { Schema, model } from 'mongoose';
+import { ICode } from '../model/code.model';
 
 const schema = new Schema<ICode>(
   {
     submissionId: {
-        type: String,
+      type: String,
       required: true,
     },
     code: {
@@ -18,4 +17,4 @@ const schema = new Schema<ICode>(
   }
 );
 
-export default model<ICode>("code", schema);
+export default model<ICode>('code', schema);
