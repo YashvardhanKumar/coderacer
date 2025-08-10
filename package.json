@@ -1,0 +1,40 @@
+{
+  "name": "coderacer",
+  "version": "1.0.0",
+  "description": "CodeRacer - A competitive programming platform",
+  "private": true,
+  "workspaces": [
+    "client/user",
+    "client/contributor",
+    "server"
+  ],
+  "scripts": {
+    "dev:user": "cd client/user && npm run dev",
+    "dev:contributor": "cd client/contributor && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "build:user": "cd client/user && npm run build",
+    "build:contributor": "cd client/contributor && npm run build",
+    "build:server": "cd server && npx tsc",
+    "lint:user": "cd client/user && npm run lint",
+    "lint:contributor": "cd client/contributor && npm run lint",
+    "lint:server": "cd server && npx eslint src --ext .ts",
+    "lint:all": "npm run lint:user && npm run lint:contributor && npm run lint:server",
+    "type-check:server": "cd server && npx tsc --noEmit",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0"
+  },
+  "lint-staged": {
+    "server/**/*.ts": [
+      "prettier --write"
+    ],
+    "client/contributor/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{json,md}": "prettier --write"
+  }
+}
