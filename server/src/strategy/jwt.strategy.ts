@@ -1,9 +1,8 @@
 import passport from 'passport';
-import { ExtractJwt, Strategy as JWTStrategy } from 'passport-jwt';
+import { Strategy as JWTStrategy } from 'passport-jwt';
 import { useTypeORM } from '../databases/postgres/typeorm';
 import { UserEntity } from '../databases/postgres/entity/user.entity';
 import { Request } from 'express';
-import { verifyToken } from '../utils/authUtils';
 passport.use(
   new JWTStrategy(
     {
