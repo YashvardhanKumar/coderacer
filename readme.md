@@ -86,11 +86,55 @@ The application can be configured through environment variables in the `docker-c
 
 ## Development
 
+### Local Development Setup
+
 To make changes to the application:
+
+1. Install dependencies: `npm install` (from root directory)
+2. Install app-specific dependencies:
+   - User app: `cd client/user && npm install`
+   - Contributor app: `cd client/contributor && npm install`
+   - Server: `cd server && npm install`
+3. Start development servers:
+   - User app: `npm run dev:user`
+   - Contributor app: `npm run dev:contributor`
+   - Server: `npm run dev:server`
+
+### Docker Development
+
+Alternatively, use Docker for development:
 
 1. Modify the source code
 2. Rebuild the containers with `docker-compose build`
 3. Restart with `docker-compose up -d`
+
+### Development Workflow
+
+1. Create a feature branch: `git checkout -b feature/your-feature`
+2. Make your changes
+3. Stage changes: `git add .`
+4. Commit with conventional message: `git commit -m "feat: Add your feature"`
+5. Push and create a pull request
+
+### Commit Message Format
+
+Follow the [Conventional Commits](https://conventionalcommits.org/) specification:
+
+- `feat:` - New features
+- `fix:` - Bug fixes
+- `docs:` - Documentation changes
+- `style:` - Code style changes (formatting, missing semicolons, etc)
+- `refactor:` - Code changes that neither fix bugs nor add features
+- `test:` - Adding or updating tests
+- `chore:` - Maintenance tasks
+
+### Quality Assurance
+
+This project enforces code quality through:
+
+- **Precommit hooks**: Prettier formatting and linting run automatically
+- **CI/CD pipeline**: GitHub Actions verify all changes
+- **Squash merge only**: Keeps commit history clean
 
 ## Troubleshooting
 
