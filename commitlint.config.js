@@ -1,23 +1,15 @@
 module.exports = {
   extends: ['@commitlint/config-conventional'],
+  parserPreset: {
+    parserOpts: {
+      // Match: Either COD-<num>: message OR type: message
+      headerPattern: /^(COD-\d+|build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test):\s?(.*)$/,
+      headerCorrespondence: ['typeOrTicket', 'subject'],
+    },
+  },
   rules: {
-    'type-enum': [
-      2,
-      'always',
-      [
-        'build',
-        'chore',
-        'ci',
-        'docs',
-        'feat',
-        'fix',
-        'perf',
-        'refactor',
-        'revert',
-        'style',
-        'test',
-      ],
-    ],
-    'subject-case': [2, 'always', 'sentence-case'],
+    'subject-empty': [2, 'never'], // subject must not be empty
+    'type-empty': [0], // disable default type check
+    'subject-case': [2, 'always', 'sentence-case'], // enforce sentence case
   },
 };
