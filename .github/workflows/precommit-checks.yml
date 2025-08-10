@@ -32,5 +32,14 @@ jobs:
       - name: Install server dependencies
         run: cd server && npm install
 
+      - name: Lint user app
+        run: cd client/user && npm run lint --if-present
+
+      - name: Lint contributor app
+        run: npm run lint:contributor
+
+      - name: Lint server
+        run: npm run lint:server --if-present
+
       - name: Check TypeScript compilation (server)
         run: npm run type-check:server
