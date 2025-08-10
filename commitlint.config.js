@@ -10,6 +10,5 @@ module.exports = {
   rules: {
     'subject-empty': [2, 'never'], // subject must not be empty
     'type-empty': [0], // disable default type check
-    'subject-case': [2, 'always', 'sentence-case'], // enforce sentence case
   },
 };
