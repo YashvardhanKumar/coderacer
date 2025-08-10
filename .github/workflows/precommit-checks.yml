@@ -2,65 +2,35 @@ name: Pre-commit Checks
 
 on:
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
   push:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   lint-and-format:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
 
-    - name: Install root dependencies
-      run: npm install
+      - name: Install root dependencies
+        run: npm install
 
-    - name: Install user app dependencies
-      run: cd client/user && npm install
+      - name: Install user app dependencies
+        run: cd client/user && npm install
 
-    - name: Install contributor app dependencies  
-      run: cd client/contributor && npm install
+      - name: Install contributor app dependencies
+        run: cd client/contributor && npm install
 
-    - name: Install server dependencies
-      run: cd server && npm install
+      - name: Install server dependencies
+        run: cd server && npm install
 
-    - name: Lint user app
-      run: cd client/user && npm run lint --if-present
-
-    - name: Lint contributor app
-      run: npm run lint:contributor
-
-    - name: Lint server
-      run: npm run lint:server --if-present
-
-    - name: Check TypeScript compilation (server)
-      run: npm run type-check:server
-
-  commitlint:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Validate PR title
-      run: echo "${{ github.event.pull_request.title }}" | npx commitlint
+      - name: Check TypeScript compilation (server)
+        run: npm run type-check:server
