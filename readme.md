@@ -13,7 +13,10 @@ Install the following
    git clone https://github.com/YashvardhanKumar/coderacer.git
    cd coderacer
    ```
-
+2. Run the following commands from root directory
+   - `cd client/user && yarn`
+   - `cd client/contributor && yarn`
+   - `cd server && yarn`
 2. Start all services with a single command:
    ```bash
    docker-compose up -d
