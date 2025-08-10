@@ -1,5 +1,11 @@
 module.exports = {
   extends: ['@commitlint/config-conventional'],
+   parserPreset: {
+    parserOpts: {
+      headerPattern: /^(\w+)(\(([^)]+)\))?: (.+)$/,
+      headerCorrespondence: ['type', 'scope', 'ticket', 'subject'],
+    },
+  },
   rules: {
     'type-enum': [
       2,
