@@ -1,19 +1,19 @@
-import { Router, Request, Response } from "express";
-import { UserEntity } from "../databases/postgres/entity/user.entity";
-import { addSuccessWrapper } from "../utils/catchAsync";
-import { UserService } from "../services/user.services";
-import { useTypeORM } from "../databases/postgres/typeorm";
-import { jwtMiddleware } from "../strategy/jwt.strategy";
-import { success } from "../utils/errorcodes";
+import { Router, Request, Response } from 'express';
+import { UserEntity } from '../databases/postgres/entity/user.entity';
+import { addSuccessWrapper } from '../utils/catchAsync';
+import { UserService } from '../services/user.services';
+import { useTypeORM } from '../databases/postgres/typeorm';
+import { success } from '../utils/errorcodes';
+import { jwtMiddleware } from '../strategy/jwt.strategy';
 
 const router = Router();
 
 router
-  .get("/", async (req: Request, res: Response) => {
+  .get('/', async (req: Request, res: Response) => {
     addSuccessWrapper(res, UserService.getUsers());
   })
 
-  .get("/:id", jwtMiddleware, async (req: Request, res: Response) => {
+  .get('/:id', jwtMiddleware, async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -30,10 +30,10 @@ router
       return;
     }
 
-    success(res,existingProduct);
+    success(res, existingProduct);
   })
 
-  .patch("/:id", jwtMiddleware, async (req: Request, res: Response) => {
+  .patch('/:id', jwtMiddleware, async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -50,14 +50,11 @@ router
       return;
     }
 
-    const updatedProduct = await UserService.updateUsers(
-      id,
-      req.body
-    );
-    success(res,updatedProduct);
+    const updatedProduct = await UserService.updateUsers(id, req.body);
+    success(res, updatedProduct);
   })
 
-  .delete("/:id", jwtMiddleware, async (req: Request, res: Response) => {
+  .delete('/:id', jwtMiddleware, async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -75,7 +72,7 @@ router
     }
 
     await useTypeORM(UserEntity).delete({ id: existingProduct.id });
-    success(res,{ message: "Product removed!" });
+    success(res, { message: 'Product removed!' });
   });
 
 export default router;
