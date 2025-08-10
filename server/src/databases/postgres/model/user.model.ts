@@ -1,17 +1,16 @@
-import { EnumResolver, registerEnumType } from "type-graphql";
-import { ISolution } from "../../mongodb/model/solution.model";
-import { SubmittedCodeEntity } from "../entity/submitted-code.entity";
+import { registerEnumType } from 'type-graphql';
+import { SubmittedCodeEntity } from '../entity/submitted-code.entity';
 
 export enum Role {
-  ADMIN = "admin",
-  USER = "user",
-  CONTRIBUTOR = "contributor",
+  ADMIN = 'admin',
+  USER = 'user',
+  CONTRIBUTOR = 'contributor',
 }
 export enum AuthProvider {
-  LOCAL = "local",
-  GITHUB = "github",
-  LINKEDIN = "linkedin",
-  GOOGLE = "google",
+  LOCAL = 'local',
+  GITHUB = 'github',
+  LINKEDIN = 'linkedin',
+  GOOGLE = 'google',
 }
 
 export default interface IUser {
@@ -35,9 +34,9 @@ export default interface IUser {
 }
 
 registerEnumType(Role, {
-  name: "Role",
+  name: 'Role',
 });
 
 registerEnumType(AuthProvider, {
-  name: "AuthProvider",
+  name: 'AuthProvider',
 });

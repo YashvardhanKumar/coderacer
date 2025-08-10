@@ -20,7 +20,7 @@ module.exports = [
     },
     rules: {
       // Only enforce critical rules, allow existing issues
-      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unsafe-function-type': 'off',
       // Keep some basic formatting rules

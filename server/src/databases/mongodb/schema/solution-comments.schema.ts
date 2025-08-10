@@ -1,5 +1,5 @@
-import mongoose, { Schema, Types, model } from "mongoose";
-import { ISolutionComments } from "../model/solution-comments.model";
+import { Schema, model } from 'mongoose';
+import { ISolutionComments } from '../model/solution-comments.model';
 
 const schema = new Schema<ISolutionComments>(
   {
@@ -20,17 +20,19 @@ const schema = new Schema<ISolutionComments>(
       required: true,
     },
     commentsOf: {
-      ref: "solutions",
+      ref: 'solutions',
       type: Schema.Types.ObjectId,
     },
-    replies: [{
-      ref: "solutions-comments",
-      type: Schema.Types.ObjectId,
-    }],
+    replies: [
+      {
+        ref: 'solutions-comments',
+        type: Schema.Types.ObjectId,
+      },
+    ],
   },
   {
     timestamps: true,
   }
 );
 
-export default model<ISolutionComments>("solutions-comments", schema);
+export default model<ISolutionComments>('solutions-comments', schema);

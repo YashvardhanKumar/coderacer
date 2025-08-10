@@ -11,16 +11,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { ProblemList } from "@/components/problem-list";
 import Navbar from "@/components/navbar";
-import { Suspense, useEffect, useState } from "react";
-import { getCurUser, getUserById } from "@/lib/api/user";
 
 
 export const HomePage = () => {
-  const [curUser,setCurUser] = useState();
-  useEffect(() => {
-    if(localStorage.getItem('isAuth') == 'Yes')
-      getCurUser().then(user => setCurUser(user));
-  }, []);
+  // const [curUser,setCurUser] = useState();
+  // useEffect(() => {
+    // if(localStorage.getItem('isAuth') == 'Yes')
+      // getCurUser().then(user => setCurUser(user));
+  // }, []);
   return (
       <div className="flex flex-col min-h-screen w-screen">
         <Navbar dp={""} name={"Yashvardhan Kumar"} />

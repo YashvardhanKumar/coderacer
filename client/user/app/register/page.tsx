@@ -2,10 +2,8 @@
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -75,7 +73,7 @@ export default function Register() {
             <FormField
               control={form.control}
               name="email"
-              render={({ field }) => (
+              render={({  }) => (
                 <FormItem>
                   <FormControl>
                     <Input placeholder="Email" />
@@ -87,7 +85,7 @@ export default function Register() {
             <FormField
               control={form.control}
               name="username"
-              render={({ field }) => (
+              render={({  }) => (
                 <FormItem>
                   <FormControl>
                     <Input placeholder="Choose a Username" />
@@ -99,7 +97,7 @@ export default function Register() {
             <FormField
               control={form.control}
               name="password"
-              render={({ field }) => (
+              render={({  }) => (
                 <FormItem>
                   <FormControl>
                     <Input placeholder="Create Password" />
@@ -111,7 +109,7 @@ export default function Register() {
             <FormField
               control={form.control}
               name="confirmPassword"
-              render={({ field }) => (
+              render={({  }) => (
                 <FormItem>
                   <FormControl>
                     <Input placeholder="Confirm your Password" />
@@ -129,7 +127,7 @@ export default function Register() {
               </Link>
             </div>
           </div>
-          <Button children="Sign Up" className="text-white font-bold mt-2 " />
+          <Button className="text-white font-bold mt-2 ">Sign Up</Button>
           <div className="w-full flex flex-nowrap items-center gap-3 mt-2 text-gray-400">
             <div className="h-[1px] flex-1 bg-black opacity-20"></div>
             <div>or sign up with</div>

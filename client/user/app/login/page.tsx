@@ -2,14 +2,12 @@
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import React, { MouseEvent, MouseEventHandler, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -17,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { FaGithub, FaGoogle, FaLinkedin } from "react-icons/fa";
 import axios from "axios";
-import { randomUUID } from "crypto";
 import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from "next/navigation";
 
@@ -26,8 +23,6 @@ const formSchema = z.object({
   password: z.string({ message: "Required" }),
 });
 export default function Login() {
-  const [isConnected, setIsConnected] = useState(false);
-  const [isConnecting, setIsConnecting] = useState(false);
   const nav = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,7 +36,6 @@ export default function Login() {
   }
   async function handleGithubButton() {
     try {
-      setIsConnecting(true);
       const userId = uuidv4();
       const res = await axios.post("http://api.localhost/auth/github", {
         userId,
@@ -49,7 +43,7 @@ export default function Login() {
       });
 
       const uri = res.data.url;
-      var ref = window.open(uri, "_blank");
+      const ref = window.open(uri, "_blank");
       const pollTimer = window.setInterval(() => {
         if (ref?.closed !== false) {
           window.clearInterval(pollTimer);
@@ -57,7 +51,6 @@ export default function Login() {
         }
       }, 200);
     } catch (e: any) {
-      setIsConnecting(false);
       alert(e.message);
     }
 
@@ -78,16 +71,12 @@ export default function Login() {
       console.log(credentials);
       
       if (credentials) {
-        setIsConnecting(false);
-        setIsConnected(true);
         localStorage.setItem("isAuth", "Yes");
         localStorage.setItem("role", "user");
         localStorage.setItem("userId", credentials.userId);
         nav.replace('/')
       }
-      setIsConnecting(false);
     } catch (e: any) {
-      setIsConnecting(false);
       alert(e.message);
     }
   };
@@ -109,7 +98,7 @@ export default function Login() {
             <FormField
               control={form.control}
               name="email"
-              render={({ field }) => (
+              render={({  }) => (
                 <FormItem>
                   <FormControl>
                     <Input placeholder="Email" />
@@ -122,7 +111,7 @@ export default function Login() {
             <FormField
               control={form.control}
               name="password"
-              render={({ field }) => (
+              render={({}) => (
                 <FormItem>
                   <FormControl>
                     <Input placeholder="Password" />
@@ -143,7 +132,7 @@ export default function Login() {
               </Link>
             </div>
           </div>
-          <Button children="Sign In" className="text-white font-bold mt-2 " />
+          <Button className="text-white font-bold mt-2 ">Sign In</Button>
           <div className="w-full flex flex-nowrap items-center gap-3 mt-2 text-gray-400">
             <div className="h-[1px] flex-1 bg-black opacity-20"></div>
             <div>or sign in with</div>

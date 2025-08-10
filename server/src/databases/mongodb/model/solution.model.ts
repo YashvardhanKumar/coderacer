@@ -1,4 +1,4 @@
-import { ObjectId, Schema, Types } from "mongoose";
+import { ObjectId, Schema } from 'mongoose';
 
 export class ISolution extends Document {
   _id: ObjectId;

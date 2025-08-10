@@ -49,7 +49,7 @@ export function ProblemList() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {problems.map((problem, i) => (
+        {problems.map((problem) => (
           <TableRow key={problem.id}>
             <TableCell><CircleCheckBigIcon color="green"/></TableCell>
             <TableCell>
