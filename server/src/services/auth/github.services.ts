@@ -1,42 +1,40 @@
-import { Request, Response } from "express";
-import crypto from "crypto";
-import { rClient } from "../../databases/redis";
-import { v4 as uuidv4 } from "uuid";
-import { bad_req, success, unauthorized } from "../../utils/errorcodes";
-import axios from "axios";
+import { Request, Response } from 'express';
+import crypto from 'crypto';
+import { rClient } from '../../databases/redis';
+import { bad_req, success, unauthorized } from '../../utils/errorcodes';
+import axios from 'axios';
 import IUser, {
   AuthProvider,
   Role,
-} from "../../databases/postgres/model/user.model";
-import { UserService } from "../user.services";
-import jwt from "jsonwebtoken";
-import { JwtPayload } from "../../middleware";
-import { generateToken, verifyToken } from "../../utils/authUtils";
-import { Octokit } from "@octokit/core";
-import { useTypeORM } from "../../databases/postgres/typeorm";
-import { UserEntity } from "../../databases/postgres/entity/user.entity";
+} from '../../databases/postgres/model/user.model';
+import { UserService } from '../user.services';
+import { JwtPayload } from '../../middleware';
+import { generateToken } from '../../utils/authUtils';
+import { Octokit } from '@octokit/core';
+import { useTypeORM } from '../../databases/postgres/typeorm';
+import { UserEntity } from '../../databases/postgres/entity/user.entity';
 
-declare module "express-serve-static-core" {
+declare module 'express-serve-static-core' {
   interface Request {
     user: JwtPayload;
   }
 }
 
-const REDIRECT_URL = "http://api.localhost/auth/github/oauth2callback";
-const GITHUB_AUTH_URL = "https://github.com/login/oauth/authorize";
-const scopes = ["read:user", "user:email"].join("%20");
+const REDIRECT_URL = 'http://api.localhost/auth/github/oauth2callback';
+const GITHUB_AUTH_URL = 'https://github.com/login/oauth/authorize';
+const scopes = ['read:user', 'user:email'].join('%20');
 
 export class Github {
   static async authorize(req: Request, res: Response) {
     const role = req.body.role as Role;
     const userId = req.body.userId;
     const state_data = {
-      state: crypto.randomBytes(32).toString("hex"),
+      state: crypto.randomBytes(32).toString('hex'),
       userId,
       role,
     };
-    let encoded_state = Buffer.from(JSON.stringify(state_data)).toString(
-      "base64url"
+    const encoded_state = Buffer.from(JSON.stringify(state_data)).toString(
+      'base64url'
     );
     await rClient.setEx(`github_state:${userId}`, 600, encoded_state);
     success(res, {
@@ -54,7 +52,7 @@ export class Github {
       const code = req.query.code as string;
       const encoded_state = req.query.state as string;
       const decoded_state = JSON.parse(
-        Buffer.from(encoded_state, "base64url").toString()
+        Buffer.from(encoded_state, 'base64url').toString()
       );
 
       const state = decoded_state.state;
@@ -62,15 +60,15 @@ export class Github {
       const role = decoded_state.role;
       const redis_state_data = await rClient.get(`github_state:${userId}`);
       const redis_state = JSON.parse(
-        Buffer.from(redis_state_data ?? "", "base64url").toString()
+        Buffer.from(redis_state_data ?? '', 'base64url').toString()
       ).state;
 
       if (!redis_state_data || state != redis_state) {
-        res.status(401).json({ error: "Invalid state" });
+        res.status(401).json({ error: 'Invalid state' });
         return;
       }
       const resp = await axios.post<string>(
-        "https://github.com/login/oauth/access_token",
+        'https://github.com/login/oauth/access_token',
         {
           client_id: process.env.GITHUB_CLIENT_ID,
           client_secret: process.env.GITHUB_CLIENT_SECRET,
@@ -79,20 +77,20 @@ export class Github {
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );
-      var vars = resp.data.split("&");
-      let github_token = vars[0].split("=")[1];
+      const vars = resp.data.split('&');
+      const github_token = vars[0].split('=')[1];
 
       await rClient.del(`github_state:${userId}`);
       await rClient.setEx(
         `github_credentials:${userId}`,
         600,
-        Buffer.from(
-          JSON.stringify({ github_token, role })
-        ).toString("base64url")
+        Buffer.from(JSON.stringify({ github_token, role })).toString(
+          'base64url'
+        )
       );
       res.status(200).send(`
           <html>
@@ -112,13 +110,12 @@ export class Github {
       let userId = req.body.userId;
       const credentials = await rClient.get(`github_credentials:${userId}`);
       if (!credentials) {
-        bad_req(res, { error: "No credentials found." });
+        bad_req(res, { error: 'No credentials found.' });
       }
       console.log(credentials);
-      
-      
+
       const cred_json = JSON.parse(
-        Buffer.from(credentials ?? "", "base64url").toString()
+        Buffer.from(credentials ?? '', 'base64url').toString()
       );
       const role = cred_json?.role;
       await rClient.del(`github_credentials:${userId}`);
@@ -127,16 +124,16 @@ export class Github {
       });
 
       const resp = (
-        await octokit.request("GET /user", {
+        await octokit.request('GET /user', {
           headers: {
-            "X-GitHub-Api-Version": "2022-11-28",
+            'X-GitHub-Api-Version': '2022-11-28',
           },
         })
       ).data;
       const emails = (
-        await octokit.request("GET /user/emails", {
+        await octokit.request('GET /user/emails', {
           headers: {
-            "X-GitHub-Api-Version": "2022-11-28",
+            'X-GitHub-Api-Version': '2022-11-28',
           },
         })
       ).data;
@@ -145,9 +142,7 @@ export class Github {
         where: [{ email: primary.email }],
       });
 
-
-
-      let metadata: IUser = {
+      const metadata: IUser = {
         id: userId,
         role: role,
         solutions: [],
@@ -159,18 +154,18 @@ export class Github {
         name: resp?.name ?? resp.login,
         avatar: resp.avatar_url,
         github: resp.html_url,
-        summary: resp?.bio ?? "",
+        summary: resp?.bio ?? '',
         dateRegistered: Date.now().toString(),
       };
-      let data = await UserService.createUser(metadata);
+      const data = await UserService.createUser(metadata);
       userId = existingUser?.id ?? data.id;
-      const accessToken = generateToken({ userId  , role }, 30 * 24 * 60 * 60);
+      const accessToken = generateToken({ userId, role }, 30 * 24 * 60 * 60);
 
-      res.cookie("github_token", cred_json.github_token, {
+      res.cookie('github_token', cred_json.github_token, {
         httpOnly: true,
         secure: true,
       });
-      res.cookie("accessToken", accessToken, {
+      res.cookie('accessToken', accessToken, {
         httpOnly: true,
         secure: true,
       });

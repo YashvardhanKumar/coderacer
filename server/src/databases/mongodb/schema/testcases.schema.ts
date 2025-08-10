@@ -1,7 +1,5 @@
-import { Schema, Types, model } from "mongoose";
-import { IProblems } from "../model/problems.model";
-import { ISolution } from "../model/solution.model";
-import { ITestcases } from "../model/testcases.model";
+import { Schema, model } from 'mongoose';
+import { ITestcases } from '../model/testcases.model';
 
 const schema = new Schema<ITestcases>(
   {
@@ -39,4 +37,4 @@ const schema = new Schema<ITestcases>(
   }
 );
 
-export default model<ITestcases>("testcases", schema);
+export default model<ITestcases>('testcases', schema);

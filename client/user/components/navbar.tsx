@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useEffect } from "react";
 
 function Navbar({dp, name}: {dp: string, name: string}) {
   const nav = useRouter();

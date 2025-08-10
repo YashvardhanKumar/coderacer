@@ -1,8 +1,21 @@
 # Coderacer
+
 A problem solving platform where you can practice questions for Online Assessments and Interviews
 
+## Precommit Checks
+
+This project has automated precommit checks enabled using Husky and lint-staged:
+
+- **ESLint**: Code quality checks for all TypeScript/JavaScript files
+- **Prettier**: Automatic code formatting
+- **Commitlint**: Ensures commit messages follow conventional standards
+
+The checks run automatically before each commit to maintain code quality.
+
 ## Prerequisites
+
 Install the following
+
 - [Docker](https://docs.docker.com/get-docker/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
 
@@ -17,13 +30,15 @@ Install the following
    - `cd client/user && yarn`
    - `cd client/contributor && yarn`
    - `cd server && yarn`
-2. Start all services with a single command:
+3. Start all services with a single command:
+
    ```bash
    docker-compose up -d
    ```
+
    This will start all containers in detached mode.
 
-3. Access the application:
+4. Access the application:
    ```
    http://localhost
    ```
@@ -31,6 +46,7 @@ Install the following
 ## Components
 
 This application uses several Docker containers:
+
 - Frontend: User interface for the coding platform
 - Backend API: Handles user requests and business logic
 - Database: Stores user data, challenges, and results
@@ -39,6 +55,7 @@ This application uses several Docker containers:
 ## Common Commands
 
 ### View logs
+
 ```bash
 # View logs for all services
 docker-compose logs
@@ -51,11 +68,13 @@ docker-compose logs -f
 ```
 
 ### Stop the application
+
 ```bash
 docker-compose down
 ```
 
 ### Rebuild containers after file changes
+
 ```bash
 docker-compose build
 docker-compose up -d
@@ -67,14 +86,60 @@ The application can be configured through environment variables in the `docker-c
 
 ## Development
 
+### Local Development Setup
+
 To make changes to the application:
+
+1. Install dependencies: `npm install` (from root directory)
+2. Install app-specific dependencies:
+   - User app: `cd client/user && npm install`
+   - Contributor app: `cd client/contributor && npm install`
+   - Server: `cd server && npm install`
+3. Start development servers:
+   - User app: `npm run dev:user`
+   - Contributor app: `npm run dev:contributor`
+   - Server: `npm run dev:server`
+
+### Docker Development
+
+Alternatively, use Docker for development:
+
 1. Modify the source code
 2. Rebuild the containers with `docker-compose build`
 3. Restart with `docker-compose up -d`
 
+### Development Workflow
+
+1. Create a feature branch: `git checkout -b feature/your-feature`
+2. Make your changes
+3. Stage changes: `git add .`
+4. Commit with conventional message: `git commit -m "feat: Add your feature"`
+5. Push and create a pull request
+
+### Commit Message Format
+
+Follow the [Conventional Commits](https://conventionalcommits.org/) specification:
+
+- `feat:` - New features
+- `fix:` - Bug fixes
+- `docs:` - Documentation changes
+- `style:` - Code style changes (formatting, missing semicolons, etc)
+- `refactor:` - Code changes that neither fix bugs nor add features
+- `test:` - Adding or updating tests
+- `chore:` - Maintenance tasks
+
+### Quality Assurance
+
+This project enforces code quality through:
+
+- **Precommit hooks**: Prettier formatting and linting run automatically
+- **CI/CD pipeline**: GitHub Actions verify all changes
+- **Squash merge only**: Keeps commit history clean
+
 ## Troubleshooting
 
 If you encounter any issues:
+
 - Check the logs with `docker-compose logs`
 - Ensure all required ports are available
 - Try restarting with `docker-compose restart`

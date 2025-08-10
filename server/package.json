@@ -51,6 +51,10 @@
     "uuid": "^11.0.5"
   },
   "devDependencies": {
-    "@types/mongoose": "^5.11.96"
+    "@types/mongoose": "^5.11.96",
+    "@typescript-eslint/eslint-plugin": "^8.39.0",
+    "@typescript-eslint/parser": "^8.39.0",
+    "eslint": "^9.33.0",
+    "prettier": "^3.6.2"
   }
 }

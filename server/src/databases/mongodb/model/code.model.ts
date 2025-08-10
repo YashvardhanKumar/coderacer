@@ -1,10 +1,10 @@
-import { Document, ObjectId, Schema } from "mongoose";
-import { ObjectType, registerEnumType } from "type-graphql";
+import { Document, ObjectId } from 'mongoose';
+import { ObjectType, registerEnumType } from 'type-graphql';
 
 export enum Difficulty {
-  EASY = "easy",
-  MEDIUM = "medium",
-  HARD = "hard",
+  EASY = 'easy',
+  MEDIUM = 'medium',
+  HARD = 'hard',
 }
 
 @ObjectType()
@@ -14,7 +14,6 @@ export class ICode extends Document {
   code: string;
 }
 
-
 registerEnumType(Difficulty, {
-  name: "Difficulty"
-})
+  name: 'Difficulty',
+});

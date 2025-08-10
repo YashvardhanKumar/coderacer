@@ -1,28 +1,28 @@
-import { Router, Request, Response } from "express";
-import { useTypeORM } from "../../databases/postgres/typeorm";
-import { UserEntity } from "../../databases/postgres/entity/user.entity";
+import { Router, Request, Response } from 'express';
+import { useTypeORM } from '../../databases/postgres/typeorm';
+import { UserEntity } from '../../databases/postgres/entity/user.entity';
 
 const controller = Router();
 
 controller
 
-  .post("/", async (req: Request, res: Response) => {
+  .post('/', async (req: Request, res: Response) => {
     const product = new UserEntity();
     product.name = req.body.name;
-    product.image = req.body.image;
-    product.price = req.body.price;
-    product.description = req.body.description;
+    product.avatar = req.body.image;
+    // product.price = req.body.price;
+    product.summary = req.body.description;
 
     const newProduct = await useTypeORM(UserEntity).save(product);
     res.status(201).send(newProduct);
   })
 
-  .get("/", async (req: Request, res: Response) => {
+  .get('/', async (req: Request, res: Response) => {
     const products = await useTypeORM(UserEntity).find();
     res.send(products);
   })
 
-  .get("/:id", async (req: Request, res: Response) => {
+  .get('/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -42,7 +42,7 @@ controller
     res.send(existingProduct);
   })
 
-  .patch("/:id", async (req: Request, res: Response) => {
+  .patch('/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -66,7 +66,7 @@ controller
     res.send(updatedProduct);
   })
 
-  .delete("/:id", async (req: Request, res: Response) => {
+  .delete('/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -84,7 +84,7 @@ controller
     }
 
     await useTypeORM(UserEntity).remove(existingProduct);
-    res.send({ message: "Product removed!" });
+    res.send({ message: 'Product removed!' });
   });
 
 export default controller;

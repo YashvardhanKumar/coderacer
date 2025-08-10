@@ -1,6 +1,6 @@
-import { Field, InputType } from "type-graphql";
-import { UserEntity } from "../../databases/postgres/entity/user.entity";
-import { AuthProvider, Role } from "../../databases/postgres/model/user.model";
+import { Field, InputType } from 'type-graphql';
+import { UserEntity } from '../../databases/postgres/entity/user.entity';
+import { AuthProvider, Role } from '../../databases/postgres/model/user.model';
 
 @InputType()
 export class CreateUserInput implements Partial<UserEntity> {
@@ -16,10 +16,10 @@ export class CreateUserInput implements Partial<UserEntity> {
   @Field()
   public email!: string;
 
-  @Field((_type) => Role)
+  @Field(() => Role)
   public role!: Role;
 
-  @Field((_type) => AuthProvider)
+  @Field(() => AuthProvider)
   public authProvider!: AuthProvider;
 
   @Field({ nullable: true })
@@ -58,10 +58,10 @@ export class UpdateUserInput implements Partial<UserEntity> {
   @Field({ nullable: true })
   public email?: string;
 
-  @Field((_type) => Role, { nullable: true })
+  @Field(() => Role, { nullable: true })
   public role?: Role;
 
-  @Field((_type) => AuthProvider, { nullable: true })
+  @Field(() => AuthProvider, { nullable: true })
   public authProvider?: AuthProvider;
 
   @Field({ nullable: true })
@@ -88,4 +88,3 @@ export class UpdateUserInput implements Partial<UserEntity> {
   @Field({ nullable: true })
   public avatar?: string;
 }
-

@@ -1,5 +1,5 @@
-import { Schema, Types, model } from "mongoose";
-import { IProblems } from "../model/problems.model";
+import { Schema, model } from 'mongoose';
+import { IProblems } from '../model/problems.model';
 
 const schema = new Schema<IProblems>(
   {
@@ -15,23 +15,29 @@ const schema = new Schema<IProblems>(
       type: String,
       required: true,
     },
-    hints: [{
-      type: String,
-      required: true,
-    }],
-    tags: [{
-      type: String,
-      required: true,
-    }],
-    testcases: [{
-      ref: "testcases",
-      type: Schema.Types.ObjectId,
-      required: true,
-    }],
+    hints: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
+    tags: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
+    testcases: [
+      {
+        ref: 'testcases',
+        type: Schema.Types.ObjectId,
+        required: true,
+      },
+    ],
   },
   {
     timestamps: true,
   }
 );
 
-export default model<IProblems>("problems", schema);
+export default model<IProblems>('problems', schema);

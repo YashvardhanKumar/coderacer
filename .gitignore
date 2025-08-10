@@ -1,6 +1,11 @@
+# Dependencies
 /server/node_modules
 /client/user/node_modules
 /client/contributor/node_modules
+node_modules/
+
+# Husky
+/.husky/_
 
 
 
