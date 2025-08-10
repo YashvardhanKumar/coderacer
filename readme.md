@@ -13,7 +13,7 @@ Install the following
    git clone https://github.com/YashvardhanKumar/coderacer.git
    cd coderacer
    ```
-2. Run the following commands from root directory
+2. Run the following commands from the root directory
    - `cd client/user && yarn`
    - `cd client/contributor && yarn`
    - `cd server && yarn`
