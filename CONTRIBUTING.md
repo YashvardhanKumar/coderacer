@@ -93,9 +93,9 @@ Before contributing, make sure you have the following installed:
 
 2. **Create a feature branch**:
    ```bash
-   git checkout -b feature/your-feature-name
+   git checkout -b feat: your-feature-name
    # or
-   git checkout -b fix/your-bug-fix
+   git checkout -b fix: your-bug-fix
    ```
 
 ### Making Changes
